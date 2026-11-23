@@ -1,0 +1,78 @@
+Assignment No. 6: File Handling (fstream / ofstream / ifstream)
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class Student
+{
+private:
+    int rollNo;
+    char name[50];
+    int age;
+
+public:
+    void accept()
+    {
+        cout << "Enter Roll Number: ";
+        cin >> rollNo;
+        cin.ignore();
+        cout << "Enter Student Name: ";
+        cin.getline(name, 50);
+        cout << "Enter Age: ";
+        cin >> age;
+    }
+
+    void display()
+    {
+        cout << "\nRoll Number : " << rollNo
+             << "\tName : " << name
+             << "\tAge : " << age;
+    }
+};
+
+int main()
+{
+    Student s;
+    fstream file;
+    int n;
+
+    cout << "===== STUDENT FILE HANDLING SYSTEM =====\n";
+    cout << "\nHow many student records do you want to enter? ";
+    cin >> n;
+
+    // Open file in write mode
+    file.open("student.dat", ios::out | ios::binary);
+    if (!file)
+    {
+        cout << "Error opening file for writing!\n";
+        return 1;
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << "\n--- Enter details for Student " << i + 1 << " ---\n";
+        s.accept();
+        file.write((char *)&s, sizeof(s));
+    }
+    file.close();
+    cout << "\nRecords saved to file successfully.\n";
+
+    // Reopen file in read mode
+    file.open("student.dat", ios::in | ios::binary);
+    if (!file)
+    {
+        cout << "Error opening file for reading!\n";
+        return 1;
+    }
+
+    cout << "\n========== STORED STUDENT RECORDS ==========";
+    while (file.read((char *)&s, sizeof(s)))
+    {
+        s.display();
+    }
+    cout << "\n============================================\n";
+    file.close();
+
+    return 0;
+}

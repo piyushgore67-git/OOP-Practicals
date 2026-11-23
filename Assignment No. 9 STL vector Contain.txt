@@ -1,0 +1,147 @@
+Assignment No. 9: STL vector Container with Sorting and Searching
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+class Item
+{
+public:
+    int code;
+    string name;
+    double cost;
+    int quantity;
+
+    void accept()
+    {
+        cout << "Enter Item Code: ";
+        cin >> code;
+        cin.ignore();
+        cout << "Enter Item Name: ";
+        getline(cin, name);
+        cout << "Enter Item Cost: ";
+        cin >> cost;
+        cout << "Enter Item Quantity: ";
+        cin >> quantity;
+    }
+
+    void display() const
+    {
+        cout << "\nItem Code : " << code
+             << "\tName : " << name
+             << "\tCost : Rs. " << cost
+             << "\tQuantity : " << quantity;
+    }
+
+    // Required for std::find
+    bool operator==(const Item &other) const
+    {
+        return code == other.code;
+    }
+};
+
+// Comparator function for std::sort (sort by Item Code)
+bool compareByCode(const Item &a, const Item &b)
+{
+    return a.code < b.code;
+}
+
+int main()
+{
+    vector<Item> itemRecords;
+    int choice;
+
+    do
+    {
+        cout << "\n\n***** Menu *****";
+        cout << "\n1. Insert";
+        cout << "\n2. Display";
+        cout << "\n3. Search";
+        cout << "\n4. Sort";
+        cout << "\n5. Delete";
+        cout << "\n6. Exit";
+        cout << "\nEnter your choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+        {
+            Item temp;
+            temp.accept();
+            itemRecords.push_back(temp);
+            cout << "Item inserted successfully.";
+            break;
+        }
+        case 2:
+        {
+            if (itemRecords.empty())
+            {
+                cout << "No records available.";
+            }
+            else
+            {
+                cout << "\n--- Item Records ---";
+                vector<Item>::iterator it;
+                for (it = itemRecords.begin(); it != itemRecords.end(); ++it)
+                {
+                    it->display();
+                }
+            }
+            break;
+        }
+        case 3:
+        {
+            Item searchItem;
+            cout << "Enter Item Code to search: ";
+            cin >> searchItem.code;
+
+            vector<Item>::iterator it = find(itemRecords.begin(), itemRecords.end(), searchItem);
+            if (it != itemRecords.end())
+            {
+                cout << "Item Found:";
+                it->display();
+            }
+            else
+            {
+                cout << "Item not found.";
+            }
+            break;
+        }
+        case 4:
+        {
+            sort(itemRecords.begin(), itemRecords.end(), compareByCode);
+            cout << "Items sorted by Item Code successfully.";
+            break;
+        }
+        case 5:
+        {
+            Item deleteItem;
+            cout << "Enter Item Code to delete: ";
+            cin >> deleteItem.code;
+
+            vector<Item>::iterator it = find(itemRecords.begin(), itemRecords.end(), deleteItem);
+            if (it != itemRecords.end())
+            {
+                itemRecords.erase(it);
+                cout << "Item deleted successfully.";
+            }
+            else
+            {
+                cout << "Item not found.";
+            }
+            break;
+        }
+        case 6:
+            cout << "Exiting program...\n";
+            break;
+
+        default:
+            cout << "Invalid choice! Please try again.";
+        }
+    } while (choice != 6);
+
+    return 0;
+}

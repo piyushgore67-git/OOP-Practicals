@@ -1,0 +1,76 @@
+Assignment No. 7: User-Defined Exception Handling (User Eligibility Validation)
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+// User-Defined Exception Class
+class InvalidUserException
+{
+private:
+    string message;
+
+public:
+    InvalidUserException(string msg)
+    {
+        message = msg;
+    }
+
+    string what()
+    {
+        return message;
+    }
+};
+
+int main()
+{
+    int age;
+    double income;
+    string city;
+    string vehicle;
+
+    cout << "===== USER ELIGIBILITY VALIDATION =====\n";
+    cout << "Enter age: ";
+    cin >> age;
+
+    cout << "Enter monthly income (Rs.): ";
+    cin >> income;
+
+    cout << "Enter city: ";
+    cin >> city;
+
+    cout << "Do you own a 4-wheeler? (Yes/No): ";
+    cin >> vehicle;
+
+    try
+    {
+        if (age < 18 || age > 55)
+        {
+            throw InvalidUserException("Age must be between 18 and 55.");
+        }
+
+        if (income < 50000 || income > 100000)
+        {
+            throw InvalidUserException("Monthly income must be between Rs. 50,000 and Rs. 1,00,000.");
+        }
+
+        if (city != "Pune" && city != "Mumbai" && city != "Bangalore" && city != "Chennai")
+        {
+            throw InvalidUserException("User must reside in Pune, Mumbai, Bangalore, or Chennai.");
+        }
+
+        if (vehicle != "Yes" && vehicle != "yes")
+        {
+            throw InvalidUserException("User must own a four-wheeler.");
+        }
+
+        cout << "\nAll conditions are satisfied.\n";
+        cout << "User is eligible.\n";
+    }
+    catch (InvalidUserException e)
+    {
+        cout << "\nException caught: " << e.what() << endl;
+    }
+
+    return 0;
+}

@@ -1,0 +1,166 @@
+Asssignment 2
+Program bank account
+
+#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+class BankAccount
+{
+private:
+    int accountNumber;
+    string accountHolderName;
+    double accountBalance;
+    string accountType;
+
+    // Static variable to count total accounts
+    static int totalAccounts;
+
+public:
+    // Default Constructor
+    BankAccount()
+    {
+        accountNumber = 0;
+        accountHolderName = "Not Available";
+        accountBalance = 0.0;
+        accountType = "Savings";
+
+        totalAccounts++;
+    }
+    // Parameterized Constructor
+    BankAccount(int accNo, string name, double balance, string type)
+    {
+        // Using 'this' pointer
+        this->accountNumber = accNo;
+        this->accountHolderName = name;
+        this->accountBalance = balance;
+        this->accountType = type;
+        totalAccounts++; //static variable
+    }
+
+    // Function to enter account details
+    void enterDetails()
+    {
+        cout << "\nEnter Account Number: ";
+        cin >> accountNumber;
+        cout << "Enter Account Holder Name: ";
+        cin.ignore();
+        getline(cin, accountHolderName);
+
+        cout << "Enter Account Balance: ";
+        cin >> accountBalance;
+
+        cout << "Enter Account Type (Savings/Current): ";
+        cin >> accountType;
+    }
+
+    // Function to display account information
+    void displayDetails()
+    {
+        cout << "\n-----------------------------------";
+        cout << "\nAccount Number     : " << accountNumber;
+        cout << "\nAccount Holder     : " << accountHolderName;
+        cout << "\nAccount Balance    : Rs. "<< fixed << setprecision(2) << accountBalance;
+        cout << "\nAccount Type       : " << accountType;
+        cout << "\n-----------------------------------";
+    }
+
+    // Inline function to calculate interest
+    inline double calculateInterest(double rate)
+    {
+        return (accountBalance * rate) / 100;
+    }
+
+    // Inline function to calculate updated balance
+    inline double updatedBalance(double rate)
+    {
+        return accountBalance + calculateInterest(rate);
+    }
+
+    // Static function to display total accounts
+    static void displayTotalAccounts()
+    {
+        cout << "\nTotal Number of Accounts Created: "
+             << totalAccounts << endl;
+    }
+
+    // Friend function declaration
+    friend void compareBalance(BankAccount, BankAccount);
+
+    // Destructor
+    ~BankAccount()
+    {
+        cout << "\nAccount object destroyed.";
+    }
+};
+// Definition of static data member
+int BankAccount::totalAccounts = 0;
+
+// Friend function to compare balances of two accounts
+void compareBalance(BankAccount acc1, BankAccount acc2)
+{
+    cout << "\n\n========== Balance Comparison ==========";
+
+    if (acc1.accountBalance > acc2.accountBalance)
+    {
+        cout << "\nAccount " << acc1.accountNumber
+             << " has higher balance.";
+    }
+    else if (acc2.accountBalance > acc1.accountBalance)
+    {
+        cout << "\nAccount " << acc2.accountNumber
+             << " has higher balance.";
+    }
+    else
+    {
+        cout << "\nBoth accounts have the same balance.";
+    }
+}
+
+int main()
+{
+    int n;
+    cout << "===== BANK ACCOUNT MANAGEMENT SYSTEM =====\n";
+    cout << "\nEnter number of accounts: ";
+    cin >> n;
+    // Array of objects
+    BankAccount accounts[n];
+
+    // Enter account details
+    for (int i = 0; i < n; i++)
+    {
+        cout << "\n\nEnter details for Account " << i + 1;
+        accounts[i].enterDetails();
+    }
+    // Display account information
+    cout << "\n\n========== ACCOUNT DETAILS ==========";
+    for (int i = 0; i < n; i++)
+    {
+        accounts[i].displayDetails();
+    }
+    // Display total number of accounts
+    BankAccount::displayTotalAccounts();
+
+    // Calculate interest for first account
+    double rate;
+    cout << "\n\nEnter interest rate for Account 1 (%): ";
+    cin >> rate;
+
+    cout << "\nInterest Amount: Rs. “ << accounts[0].calculateInterest(rate);
+
+    cout << "\nUpdated Balance: Rs. “ << accounts[0].updatedBalance(rate);
+
+    // Compare balances of first two accounts
+    if (n >= 2)
+    {
+        compareBalance (accounts[0], accounts[1]);
+    }
+    else
+    {
+        cout << "\n\nAt least two accounts are required for balance comparison.";
+    }
+
+    cout << "\n\n===== END OF PROGRAM =====\n";
+
+    return 0;
+}

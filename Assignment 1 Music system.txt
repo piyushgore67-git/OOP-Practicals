@@ -1,0 +1,65 @@
+Assignment 1 Music system
+
+#include<iostream>
+#include<string>
+using namespace std;
+class music
+{
+int id; float
+duration; string
+song_title; string
+artist_name;
+string genre;
+public:
+//Default Constructor
+music() { id=0;
+duration=0.0
+song_title=""
+artist_name=""
+; genre=""; }
+music(int song_id,float dur,string title,string artist,string album,string genr)
+{ id=song_id;
+artist_name=artist
+;
+song_title=title;
+genre=genr;
+duration=dur;
+cout<<"Parsmeterized cosructor called"<<endl;
+}
+music(music &x)
+{
+id=x.id;
+artist_name=x.artist_name;
+song_title=x.song_title;
+genre=x.genre;
+duration=x.duration; cout<<"Copy
+constructor"<<endl;
+}
+void input() {
+cout<<"Enter the name of song:";
+cin.ignore(); getline(cin,song_title);
+cout<<"\nEnter the name of
+artist:"; getline(cin,artist_name);
+cout<<"\nEnter the Genre of
+song:";
+getline(cin,genre);
+cout<<"\nEnter the song ID:";
+cin>>id;
+cout<<"\nEnter the duration of song:";
+cin>>duration;
+}
+void display() { cout<<"\nThe
+Song:"<<song_title<<endl; cout<<"The artist
+name:"<<artist_name<<endl; cout<<"The
+genre:"<<genre<<endl; cout<<"The
+id:"<<id<<endl;
+cout<<"The Duration:"<<duration<<endl;
+}
+}; int main() {
+music song1;
+song1.input();
+song1.display();
+music song2(102,4.24,"Shape of you","ED Sheeran","pop","popular");;
+song2.display(); music song3(song2); song3.display();
+return 0;
+}
